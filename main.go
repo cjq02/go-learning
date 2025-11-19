@@ -12,12 +12,8 @@ import (
 )
 
 // 函数声明
-func sayHello() {
-	fmt.Println(str)
-}
 
 // 变量声明
-var str = "Hello, World!"
 
 // DemoRegistry 示例注册表 - 函数名到函数的映射
 var demoRegistry = map[string]interface{}{
@@ -31,11 +27,8 @@ var demoRegistry = map[string]interface{}{
 	"CrossFileUsageDemo":   structs.CrossFileUsageDemo,
 	"LowercaseStructDemo":  structs.LowercaseStructDemo,
 	"RealWorldExampleDemo": structs.RealWorldExampleDemo,
-	"TagsExampleDemo":      structs.TagsExampleDemo,
-	"VisibilityDemo":       structs.VisibilityDemo,
 
 	// 基础示例（特殊处理）
-	"sayHello": sayHello,
 
 	// 反射演示示例
 	"demonstrateReflection": demonstrateReflection,
@@ -64,15 +57,6 @@ var aliasRegistry = map[string]string{
 	"1.5.4.4":            "RealWorldExampleDemo",
 	"tags_example":       "TagsExampleDemo",
 	"visibility":         "VisibilityDemo",
-
-	// 基础示例别名
-	"hello": "sayHello",
-	"basic": "sayHello",
-
-	// 反射演示示例别名
-	"reflection": "demonstrateReflection",
-	"smart_demo": "TestSmartDemo",
-	"test_smart": "TestSmartDemo",
 }
 
 // callDemoByReflection 通过反射调用示例函数
@@ -141,8 +125,6 @@ func toDemoFunctionName(input string) string {
 
 	// 处理特殊情况
 	switch input {
-	case "hello", "basic":
-		return "sayHello"
 	case "reflection":
 		return "demonstrateReflection"
 	}
@@ -188,13 +170,11 @@ func TestSmartDemo() {
 	fmt.Println("  'constants'     → 'ConstantsDemo'")
 	fmt.Println("  'anonymous_struct' → 'AnonymousStructDemo'")
 	fmt.Println("  'nested_struct' → 'NestedStructDemo'")
-	fmt.Println("  'hello'         → 'sayHello'")
 	fmt.Println("  'reflection'    → 'demonstrateReflection'")
 	fmt.Println()
 	fmt.Println("使用示例:")
 	fmt.Println("  go run main.go constants      # 自动调用 ConstantsDemo")
 	fmt.Println("  go run main.go anonymous_struct # 自动调用 AnonymousStructDemo")
-	fmt.Println("  go run main.go hello          # 自动调用 sayHello")
 }
 
 // demonstrateReflection 反射调用演示
@@ -274,21 +254,12 @@ func printHelp() {
 	fmt.Println("    cross_file_usage, 1.5.4.2         → CrossFileUsageDemo")
 	fmt.Println("    lowercase_struct, 1.5.4.3         → LowercaseStructDemo")
 	fmt.Println("    real_world_example, 1.5.4.4       → RealWorldExampleDemo")
-	fmt.Println("    tags_example                      → TagsExampleDemo")
-	fmt.Println("    visibility                        → VisibilityDemo")
-	fmt.Println()
-	fmt.Println("  基础示例:")
-	fmt.Println("    hello, basic                      → sayHello")
-	fmt.Println()
-	fmt.Println("  反射示例:")
-	fmt.Println("    reflection                        → demonstrateReflection")
 	fmt.Println()
 	fmt.Println("示例:")
 	fmt.Println("  go run main.go constants     # 自动调用 ConstantsDemo")
 	fmt.Println("  go run main.go anonymous_struct # 自动调用 AnonymousStructDemo")
 	fmt.Println("  go run main.go nested_struct # 自动调用 NestedStructDemo")
 	fmt.Println("  go run main.go 1.5.2         # 自动调用 AnonymousStructDemo")
-	fmt.Println("  go run main.go reflection    # 自动调用 demonstrateReflection")
 	fmt.Println()
 	fmt.Printf("当前注册了 %d 个示例函数\n", len(demoRegistry))
 	fmt.Printf("支持 %d 个输入别名\n", len(aliasRegistry))
