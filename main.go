@@ -28,18 +28,27 @@ var demoRegistry = map[string]interface{}{
 	"ConstantsDemo": constants.ConstantsDemo,
 }
 
-// aliasRegistry 别名映射 - 用户输入名到函数名的映射
-var aliasRegistry = map[string]string{
-	// 常量示例别名
-	"constants": "ConstantsDemo",
+// aliasRegistry 别名映射 - 动态生成
+var aliasRegistry = generateAliasRegistry()
 
-	// 结构体示例别名
-	"anonymousStruct":  "AnonymousStructDemo",
-	"nestedStruct":     "NestedStructDemo",
-	"structMethods":    "StructMethodsDemo",
-	"crossFileUsage":   "CrossFileUsageDemo",
-	"lowercaseStruct":  "LowercaseStructDemo",
-	"realWorldExample": "RealWorldExampleDemo",
+// generateAliasRegistry 动态生成别名映射
+// 从 demoRegistry 的 key 中去掉 "Demo" 后缀生成别名
+func generateAliasRegistry() map[string]string {
+	aliases := make(map[string]string)
+
+	for funcName := range demoRegistry {
+		// 去掉 "Demo" 后缀
+		if strings.HasSuffix(funcName, "Demo") {
+			alias := strings.TrimSuffix(funcName, "Demo")
+			// 将首字母转换为小写
+			if len(alias) > 0 {
+				alias = strings.ToLower(alias[:1]) + alias[1:]
+			}
+			aliases[alias] = funcName
+		}
+	}
+
+	return aliases
 }
 
 // callDemoByReflection 通过反射调用示例函数
@@ -130,20 +139,6 @@ func toDemoFunctionName(input string) string {
 	return result.String() + "Demo"
 }
 
-// 示例函数 - 这些函数可以被反射调用
-func demoFunction1() {
-	fmt.Println("这是示例函数 1")
-}
-
-func demoFunction2(name string) {
-	fmt.Println("这是示例函数 2，参数:", name)
-}
-
-func demoFunction3() int {
-	fmt.Println("这是示例函数 3，返回值")
-	return 42
-}
-
 // TestSmartDemo 智能Demo调用演示
 func TestSmartDemo() {
 	fmt.Println("=== 智能Demo调用演示 ===")
@@ -158,43 +153,6 @@ func TestSmartDemo() {
 	fmt.Println("使用示例:")
 	fmt.Println("  go run main.go constants      # 自动调用 ConstantsDemo")
 	fmt.Println("  go run main.go anonymous_struct # 自动调用 AnonymousStructDemo")
-}
-
-// demonstrateReflection 反射调用演示
-func demonstrateReflection() {
-	fmt.Println("=== 反射调用方法演示 ===")
-
-	// 1. 调用无参数函数
-	fmt.Println("1. 调用无参数函数:")
-	func1 := reflect.ValueOf(demoFunction1)
-	func1.Call([]reflect.Value{})
-
-	// 2. 调用带参数函数
-	fmt.Println("\n2. 调用带参数函数:")
-	func2 := reflect.ValueOf(demoFunction2)
-	args := []reflect.Value{reflect.ValueOf("反射调用")}
-	func2.Call(args)
-
-	// 3. 调用带返回值函数
-	fmt.Println("\n3. 调用带返回值函数:")
-	func3 := reflect.ValueOf(demoFunction3)
-	results := func3.Call([]reflect.Value{})
-	fmt.Printf("返回值: %v\n", results[0].Interface())
-
-	fmt.Println("\n=== 动态注册和调用示例 ===")
-
-	// 创建函数注册表
-	functions := map[string]interface{}{
-		"func1": demoFunction1,
-		"func2": demoFunction2,
-		"func3": demoFunction3,
-	}
-
-	// 动态调用
-	callName := "func1"
-	if fn, exists := functions[callName]; exists {
-		reflect.ValueOf(fn).Call([]reflect.Value{})
-	}
 }
 
 func main() {
@@ -227,24 +185,19 @@ func printHelp() {
 	fmt.Println("可用示例:")
 
 	// 动态列出所有可用的示例
-	fmt.Println("  常量示例:")
-	fmt.Println("    constants → ConstantsDemo")
-	fmt.Println()
-	fmt.Println("  结构体示例:")
-	fmt.Println("    anonymous  → AnonymousStructDemo")
-	fmt.Println("    nested     → NestedStructDemo")
-	fmt.Println("    methods    → StructMethodsDemo")
-	fmt.Println("    cross_file → CrossFileUsageDemo")
-	fmt.Println("    lowercase  → LowercaseStructDemo")
-	fmt.Println("    real_world → RealWorldExampleDemo")
-	fmt.Println("    tags       → TagsExampleDemo")
-	fmt.Println("    visibility → VisibilityDemo")
+	fmt.Println("  可用示例:")
+
+	// 动态显示所有别名和对应的函数
+	for alias, funcName := range aliasRegistry {
+		fmt.Printf("    %-15s → %s\n", alias, funcName)
+	}
+
 	fmt.Println()
 	fmt.Println("示例:")
-	fmt.Println("  go run main.go constants  # 自动调用 ConstantsDemo")
-	fmt.Println("  go run main.go anonymous  # 自动调用 AnonymousStructDemo")
-	fmt.Println("  go run main.go nested     # 自动调用 NestedStructDemo")
-	fmt.Println("  go run main.go methods    # 自动调用 StructMethodsDemo")
+	fmt.Println("  go run main.go constants      # 自动调用 ConstantsDemo")
+	fmt.Println("  go run main.go anonymousStruct # 自动调用 AnonymousStructDemo")
+	fmt.Println("  go run main.go nestedStruct   # 自动调用 NestedStructDemo")
+	fmt.Println("  go run main.go structMethods  # 自动调用 StructMethodsDemo")
 	fmt.Println()
 	fmt.Printf("当前注册了 %d 个示例函数\n", len(demoRegistry))
 	fmt.Printf("支持 %d 个输入别名\n", len(aliasRegistry))
