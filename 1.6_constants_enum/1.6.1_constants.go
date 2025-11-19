@@ -33,14 +33,14 @@ func ConstantsDemo() {
 
 	// 方式 5: 使用小括号包裹多个常量声明
 	const (
-		h    byte = 3
-		i         = "value"
-		j, k      = "v", 4
-		l, m      = 5, false
+		h       byte = 3
+		i            = "value"
+		j, k         = "v", 4
+		l, m, o      = 5, false, "test"
 	)
 	fmt.Printf("方式5 - h (byte): %d, i (string): %s\n", h, i)
 	fmt.Printf("方式5 - j (string): %s, k (int): %d\n", j, k)
-	fmt.Printf("方式5 - l (int): %d, m (bool): %v\n", l, m)
+	fmt.Printf("方式5 - l (int): %d, m (bool): %v, o (string): %s\n", l, m, o)
 
 	const (
 		n = 6

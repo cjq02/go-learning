@@ -26,6 +26,7 @@ var demoRegistry = map[string]interface{}{
 	"RealWorldExampleDemo": structs.RealWorldExampleDemo,
 	// 常量示例
 	"ConstantsDemo": constants.ConstantsDemo,
+	"EnumsDemo":     constants.EnumsDemo,
 }
 
 // aliasRegistry 别名映射 - 动态生成
