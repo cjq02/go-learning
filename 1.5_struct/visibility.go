@@ -2,7 +2,7 @@ package structs
 
 import "fmt"
 
-func Demo() {
+func VisibilityDemo() {
 	fmt.Println("=== Go语言可见性规则演示 ===")
 	fmt.Println()
 

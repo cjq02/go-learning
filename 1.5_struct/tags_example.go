@@ -137,7 +137,7 @@ type Config struct {
 	} `yaml:"database"`
 }
 
-func Demo() {
+func TagsExampleDemo() {
 	demonstrateStructTags()
 
 	// 演示其他标记示例

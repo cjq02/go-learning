@@ -142,6 +142,6 @@ func demonstrateNestedStruct() {
 	fmt.Printf("D.C.A.a = %s (通过D.C.A访问)\n", d.C.A.a)
 }
 
-func Demo() {
+func NestedStructDemo() {
 	demonstrateNestedStruct()
 }

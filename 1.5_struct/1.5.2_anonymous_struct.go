@@ -280,6 +280,6 @@ func runAnonymousStructDemo() {
 // 方法2：从其他 main 函数中调用
 //
 //	runAnonymousStructDemo()
-func Demo() {
+func AnonymousStructDemo() {
 	runAnonymousStructDemo()
 }

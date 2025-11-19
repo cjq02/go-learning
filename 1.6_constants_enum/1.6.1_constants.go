@@ -12,7 +12,7 @@ import "fmt"
 // 5. 常量只能使用基本数据类型：数字、字符串和布尔类型
 
 // Demo 演示常量的各种定义方式和特性
-func Demo() {
+func ConstantsDemo() {
 	fmt.Println("=== 常量定义方式示例 ===")
 
 	// 方式 1: const <name> <type> = <value>

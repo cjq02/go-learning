@@ -282,7 +282,7 @@ func demonstrateStructMethods2() {
 // ========== 代码示例 3：方法名称大小写规则演示 ==========
 
 // 示例结构体 - 演示导出和未导出方法
-type VisibilityDemo struct {
+type VisibilityExample struct {
 	// 导出字段（首字母大写）
 	PublicField string
 	// 未导出字段（首字母小写）
@@ -290,27 +290,27 @@ type VisibilityDemo struct {
 }
 
 // 导出方法（首字母大写）- 其他包可以调用
-func (v VisibilityDemo) GetPublicField() string {
+func (v VisibilityExample) GetPublicField() string {
 	return v.PublicField
 }
 
 // 导出方法（首字母大写）- 其他包可以调用
-func (v *VisibilityDemo) SetPublicField(value string) {
+func (v *VisibilityExample) SetPublicField(value string) {
 	v.PublicField = value
 }
 
 // 未导出方法（首字母小写）- 只能在同一个包内调用
-func (v VisibilityDemo) getPrivateField() string {
+func (v VisibilityExample) getPrivateField() string {
 	return v.privateField
 }
 
 // 未导出方法（首字母小写）- 只能在同一个包内调用
-func (v *VisibilityDemo) setPrivateField(value string) {
+func (v *VisibilityExample) setPrivateField(value string) {
 	v.privateField = value
 }
 
 // 导出方法可以调用未导出方法（同一个包内）
-func (v VisibilityDemo) GetPrivateFieldViaPublic() string {
+func (v VisibilityExample) GetPrivateFieldViaPublic() string {
 	return v.getPrivateField() // 可以在同一个包内调用未导出方法
 }
 
@@ -319,7 +319,7 @@ func demonstrateMethodVisibility() {
 	fmt.Println("=== 代码示例 3：方法名称大小写规则 ===")
 	fmt.Println()
 
-	v := VisibilityDemo{
+	v := VisibilityExample{
 		PublicField:  "公共字段",
 		privateField: "私有字段",
 	}
@@ -369,7 +369,7 @@ func demonstrateMethodVisibility() {
 // 2. 注释掉其他文件的 main 函数
 // 3. 或者将此 main 函数重命名为其他名称（如 mainStructMethods）并手动调用
 
-func Demo() {
+func StructMethodsDemo() {
 	demonstrateStructMethods1()
 	fmt.Println()
 	fmt.Println(strings.Repeat("=", 60))

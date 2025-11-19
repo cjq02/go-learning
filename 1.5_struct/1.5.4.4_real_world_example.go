@@ -263,6 +263,6 @@ func demonstrateRealWorldExample() {
 
 // 主函数
 // 注意：如果与同包其他文件的 main 函数冲突，可以注释掉此函数
-func Demo() {
+func RealWorldExampleDemo() {
 	demonstrateRealWorldExample()
 }
