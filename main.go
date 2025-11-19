@@ -17,9 +17,6 @@ import (
 
 // DemoRegistry 示例注册表 - 函数名到函数的映射
 var demoRegistry = map[string]interface{}{
-	// 常量示例
-	"ConstantsDemo": constants.ConstantsDemo,
-
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
@@ -27,36 +24,22 @@ var demoRegistry = map[string]interface{}{
 	"CrossFileUsageDemo":   structs.CrossFileUsageDemo,
 	"LowercaseStructDemo":  structs.LowercaseStructDemo,
 	"RealWorldExampleDemo": structs.RealWorldExampleDemo,
-
-	// 基础示例（特殊处理）
-
-	// 反射演示示例
-	"demonstrateReflection": demonstrateReflection,
-	"TestSmartDemo":         TestSmartDemo,
+	// 常量示例
+	"ConstantsDemo": constants.ConstantsDemo,
 }
 
 // aliasRegistry 别名映射 - 用户输入名到函数名的映射
 var aliasRegistry = map[string]string{
 	// 常量示例别名
-	"constants":       "ConstantsDemo",
-	"1.6":             "ConstantsDemo",
-	"1.6.1_constants": "ConstantsDemo",
+	"constants": "ConstantsDemo",
 
 	// 结构体示例别名
-	"anonymous_struct":   "AnonymousStructDemo",
-	"1.5.2":              "AnonymousStructDemo",
-	"nested_struct":      "NestedStructDemo",
-	"1.5.3":              "NestedStructDemo",
-	"struct_methods":     "StructMethodsDemo",
-	"1.5.4":              "StructMethodsDemo",
-	"cross_file_usage":   "CrossFileUsageDemo",
-	"1.5.4.2":            "CrossFileUsageDemo",
-	"lowercase_struct":   "LowercaseStructDemo",
-	"1.5.4.3":            "LowercaseStructDemo",
-	"real_world_example": "RealWorldExampleDemo",
-	"1.5.4.4":            "RealWorldExampleDemo",
-	"tags_example":       "TagsExampleDemo",
-	"visibility":         "VisibilityDemo",
+	"anonymousStruct":  "AnonymousStructDemo",
+	"nestedStruct":     "NestedStructDemo",
+	"structMethods":    "StructMethodsDemo",
+	"crossFileUsage":   "CrossFileUsageDemo",
+	"lowercaseStruct":  "LowercaseStructDemo",
+	"realWorldExample": "RealWorldExampleDemo",
 }
 
 // callDemoByReflection 通过反射调用示例函数
@@ -245,21 +228,23 @@ func printHelp() {
 
 	// 动态列出所有可用的示例
 	fmt.Println("  常量示例:")
-	fmt.Println("    constants, 1.6, 1.6.1_constants → ConstantsDemo")
+	fmt.Println("    constants → ConstantsDemo")
 	fmt.Println()
 	fmt.Println("  结构体示例:")
-	fmt.Println("    anonymous_struct, 1.5.2           → AnonymousStructDemo")
-	fmt.Println("    nested_struct, 1.5.3              → NestedStructDemo")
-	fmt.Println("    struct_methods, 1.5.4             → StructMethodsDemo")
-	fmt.Println("    cross_file_usage, 1.5.4.2         → CrossFileUsageDemo")
-	fmt.Println("    lowercase_struct, 1.5.4.3         → LowercaseStructDemo")
-	fmt.Println("    real_world_example, 1.5.4.4       → RealWorldExampleDemo")
+	fmt.Println("    anonymous  → AnonymousStructDemo")
+	fmt.Println("    nested     → NestedStructDemo")
+	fmt.Println("    methods    → StructMethodsDemo")
+	fmt.Println("    cross_file → CrossFileUsageDemo")
+	fmt.Println("    lowercase  → LowercaseStructDemo")
+	fmt.Println("    real_world → RealWorldExampleDemo")
+	fmt.Println("    tags       → TagsExampleDemo")
+	fmt.Println("    visibility → VisibilityDemo")
 	fmt.Println()
 	fmt.Println("示例:")
-	fmt.Println("  go run main.go constants     # 自动调用 ConstantsDemo")
-	fmt.Println("  go run main.go anonymous_struct # 自动调用 AnonymousStructDemo")
-	fmt.Println("  go run main.go nested_struct # 自动调用 NestedStructDemo")
-	fmt.Println("  go run main.go 1.5.2         # 自动调用 AnonymousStructDemo")
+	fmt.Println("  go run main.go constants  # 自动调用 ConstantsDemo")
+	fmt.Println("  go run main.go anonymous  # 自动调用 AnonymousStructDemo")
+	fmt.Println("  go run main.go nested     # 自动调用 NestedStructDemo")
+	fmt.Println("  go run main.go methods    # 自动调用 StructMethodsDemo")
 	fmt.Println()
 	fmt.Printf("当前注册了 %d 个示例函数\n", len(demoRegistry))
 	fmt.Printf("支持 %d 个输入别名\n", len(aliasRegistry))
