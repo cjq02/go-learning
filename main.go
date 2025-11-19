@@ -6,6 +6,7 @@ import (
 	"fmt"
 	structs "lesson1/1.5_struct"
 	constants "lesson1/1.6_constants_enum"
+	operators "lesson1/1.7_operators"
 	"os"
 	"reflect"
 	"strings"
@@ -27,6 +28,9 @@ var demoRegistry = map[string]interface{}{
 	// 常量示例
 	"ConstantsDemo": constants.ConstantsDemo,
 	"EnumsDemo":     constants.EnumsDemo,
+
+	// 运算符示例
+	"ArithmeticOperatorsDemo": operators.ArithmeticOperatorsDemo,
 }
 
 // aliasRegistry 别名映射 - 动态生成
