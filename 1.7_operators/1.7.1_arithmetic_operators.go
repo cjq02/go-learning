@@ -115,7 +115,7 @@ func demonstrateFloatingPointArithmetic() {
 
 	fmt.Printf("\n浮点数精度示例:\n")
 	fmt.Printf("0.1 + 0.2 = %.20f (不是精确的 0.3)\n", c)
-	fmt.Printf("这是浮点数二进制表示的特性导致的")
+	fmt.Println("这是浮点数二进制表示的特性导致的")
 }
 
 // demonstrateIntegerDivision 整数除法注意事项演示

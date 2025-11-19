@@ -31,6 +31,7 @@ var demoRegistry = map[string]interface{}{
 
 	// 运算符示例
 	"ArithmeticOperatorsDemo": operators.ArithmeticOperatorsDemo,
+	"OperatorsDemo":           operators.OperatorsDemo,
 }
 
 // aliasRegistry 别名映射 - 动态生成
