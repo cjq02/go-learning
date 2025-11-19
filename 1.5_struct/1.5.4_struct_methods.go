@@ -1,4 +1,4 @@
-package main
+package structs
 
 import (
 	"fmt"
@@ -369,7 +369,7 @@ func demonstrateMethodVisibility() {
 // 2. 注释掉其他文件的 main 函数
 // 3. 或者将此 main 函数重命名为其他名称（如 mainStructMethods）并手动调用
 
-func mainStructMethods() {
+func Demo() {
 	demonstrateStructMethods1()
 	fmt.Println()
 	fmt.Println(strings.Repeat("=", 60))

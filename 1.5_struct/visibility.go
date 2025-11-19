@@ -1,8 +1,8 @@
-package main
+package structs
 
 import "fmt"
 
-func main() {
+func Demo() {
 	fmt.Println("=== Go语言可见性规则演示 ===")
 	fmt.Println()
 

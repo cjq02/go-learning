@@ -1,4 +1,4 @@
-package main
+package structs
 
 import "fmt"
 
@@ -24,7 +24,7 @@ func (a *A) SetAPtr(value string) {
 
 // 结构体 B - 嵌套了 A
 type B struct {
-	A        // 匿名嵌套，可以直接访问 A 的字段和方法
+	A // 匿名嵌套，可以直接访问 A 的字段和方法
 	b string
 }
 
@@ -126,7 +126,7 @@ func demonstrateNestedStruct() {
 	// 7. 演示多层嵌套
 	fmt.Println("--- 7. 多层嵌套结构体 ---")
 	type D struct {
-		C        // 嵌套 C
+		C // 嵌套 C
 		d string
 	}
 	d := D{
@@ -142,7 +142,6 @@ func demonstrateNestedStruct() {
 	fmt.Printf("D.C.A.a = %s (通过D.C.A访问)\n", d.C.A.a)
 }
 
-func main() {
+func Demo() {
 	demonstrateNestedStruct()
 }
-

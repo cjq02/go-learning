@@ -1,4 +1,4 @@
-package main
+package structs
 
 import (
 	"encoding/json"
@@ -137,7 +137,7 @@ type Config struct {
 	} `yaml:"database"`
 }
 
-func main() {
+func Demo() {
 	demonstrateStructTags()
 
 	// 演示其他标记示例

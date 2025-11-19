@@ -1,4 +1,4 @@
-package main
+package structs
 
 import "fmt"
 
@@ -16,7 +16,7 @@ import "fmt"
 // - user_service.go: 用户业务逻辑
 // - user_repository.go: 用户数据访问层
 // - user_validator.go: 用户数据验证
-// 所有这些文件都在同一个 package main 中
+// 所有这些文件都在同一个 package structs 中
 
 // 注意：在实际项目中，这些通常会放在不同的文件中
 // 这里为了演示，我们展示它们如何在同一个包内协作
@@ -31,10 +31,10 @@ import "fmt"
 // 在实际项目中，这个结构体通常定义在 user.go 文件中
 type AppUser struct {
 	// 导出字段
-	ID       int
-	Name     string
-	Email    string
-	Age      int
+	ID    int
+	Name  string
+	Email string
+	Age   int
 	// 未导出字段 - 内部使用
 	password string // 密码不应该被外部直接访问
 	status   string // 用户状态（active, inactive, banned等）
@@ -196,7 +196,7 @@ func demonstrateRealWorldExample() {
 	fmt.Println("  user_service.go  - 用户业务逻辑")
 	fmt.Println("  user_validator.go - 用户数据验证")
 	fmt.Println("  user_utils.go    - 工具函数")
-	fmt.Println("  所有这些文件都在同一个 package main 中")
+	fmt.Println("  所有这些文件都在同一个 package structs 中")
 	fmt.Println()
 
 	// 创建用户服务
@@ -263,7 +263,6 @@ func demonstrateRealWorldExample() {
 
 // 主函数
 // 注意：如果与同包其他文件的 main 函数冲突，可以注释掉此函数
-func mainRealWorldExample() {
+func Demo() {
 	demonstrateRealWorldExample()
 }
-

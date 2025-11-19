@@ -1,4 +1,4 @@
-package main
+package structs
 
 import (
 	"encoding/json"
@@ -280,6 +280,6 @@ func runAnonymousStructDemo() {
 // 方法2：从其他 main 函数中调用
 //
 //	runAnonymousStructDemo()
-func main() {
+func Demo() {
 	runAnonymousStructDemo()
 }
