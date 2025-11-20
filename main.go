@@ -11,6 +11,7 @@ import (
 	operators "go-learning/1.7_operators"
 	controlflow "go-learning/1.8_control_flow"
 	loopcontrol "go-learning/1.9_loop_control"
+	variablescope "go-learning/1.11_variable_scope"
 	"os"
 	"reflect"
 	"strings"
@@ -35,6 +36,9 @@ var demoRegistry = map[string]interface{}{
 	"BreakDemo":           loopcontrol.BreakDemo,
 	"ContinueDemo":        loopcontrol.ContinueDemo,
 	"GotoDemo":            loopcontrol.GotoDemo,
+	// 变量作用域示例
+	"LocalVariableDemo":  variablescope.LocalVariableDemo,
+	"GlobalVariableDemo": variablescope.GlobalVariableDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
