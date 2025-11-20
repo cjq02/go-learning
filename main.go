@@ -4,9 +4,11 @@ package main
 // 导入包
 import (
 	"fmt"
-	structs "lesson1/1.5_struct"
-	constants "lesson1/1.6_constants_enum"
-	operators "lesson1/1.7_operators"
+	functions "go-learning/1.10_method"
+	pointers "go-learning/1.4_pointer"
+	structs "go-learning/1.5_struct"
+	constants "go-learning/1.6_constants_enum"
+	operators "go-learning/1.7_operators"
 	"os"
 	"reflect"
 	"strings"
@@ -18,6 +20,10 @@ import (
 
 // DemoRegistry 示例注册表 - 函数名到函数的映射
 var demoRegistry = map[string]interface{}{
+	// 指针示例
+	"PointersDemo": pointers.PointersDemo,
+	// 函数示例
+	"FunctionsDemo": functions.FunctionsDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,

@@ -1,4 +1,5 @@
-package main
+// Package pointer 演示 Go 語言指针的使用
+package pointer
 
 import (
 	"fmt"
@@ -11,7 +12,8 @@ type Person struct {
 	Age  int
 }
 
-func main() {
+// PointersDemo 指针完整示例演示
+func PointersDemo() {
 	// 调用基础指针示例
 	basicPointerDemo()
 
