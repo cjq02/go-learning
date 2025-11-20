@@ -1,4 +1,3 @@
-// Package loopcontrol 演示 Go 语言 for 循环的使用
 package loopcontrol
 
 import (
@@ -199,55 +198,76 @@ func demonstrateForLoopControlStatements() {
 }
 
 // demonstrateComplexForLoop 演示复杂的 for 循环示例
+// 这是一个经典的 Go 并发模式：带有超时控制和外部停止信号的后台任务循环
+// 核心结构：无限循环 (for {}) - "只要没叫我停，我就一直干活"
+// 三道"刹车"机制：
+// 1. 超时刹车 (Context) - 运行时间太长，强制停
+// 2. 任务完成刹车 (Atomic) - 后台任务干完了，主动停
+// 3. 强制兜底刹车 (loopCount) - 防止死循环
 func demonstrateComplexForLoop() {
-	fmt.Println("=== 10. 复杂的 for 循环示例 ===")
+	fmt.Println("=== 10. 复杂的 for 循环示例（带注释详解）===")
 
-	// 模拟带有超时控制的循环
+	// 1. 设置超时控制 (Context)
+	// 这里设置了一个 3秒后 会自动过期的上下文（"闹钟"）
+	// WithTimeout 返回一个 Context 和一个取消函数 CancelFunc
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-	defer cancel()
+	defer cancel() // 习惯用法：函数结束时清理资源
 
 	var started bool
+	// Atomic Bool 用于线程安全地在不同协程间共享状态
+	// 这里用来作为"任务完成"的信号旗
 	var stopped atomic.Bool
 
-	// 创建一个 goroutine 来设置停止标志
+	// 2. 启动后台任务 (Goroutine)
+	// 模拟一个异步工作，比如去下载文件或处理数据
 	go func() {
+		// 模拟干活干了2秒
 		time.Sleep(time.Second * 2)
+		// 告诉主线程：我干完了！
 		stopped.Store(true)
-		fmt.Println("后台任务完成，设置停止标志")
+		fmt.Println("【后台】任务完成，设置停止标志")
 	}()
 
-	// 主循环
+	// 3. 主循环 (Main Loop)
 	loopCount := 0
+
+	// 定义标签 LoopLabel，用于从 select 中直接跳出外层循环
+LoopLabel:
 	for {
 		loopCount++
 		if !started {
 			started = true
-			fmt.Println("开始循环")
+			fmt.Println("【主循环】开始执行...")
 		}
 
-		fmt.Printf("主循环第 %d 次\n", loopCount)
+		fmt.Printf("【主循环】第 %d 次轮询检查...\n", loopCount)
 
-		// 检查上下文是否超时
+		// 检查上下文是否超时 ("瞄一眼闹钟")
+		// 使用 select + default 实现非阻塞检查
 		select {
 		case <-ctx.Done():
-			fmt.Println("上下文超时")
-			break
+			// 3秒时间到了，Context 会发送信号
+			fmt.Println("【退出】上下文超时 (Context Timeout)")
+			// ⚠️ 注意：在 select 中直接使用 break 只会跳出 select，不会跳出 for 循环
+			// ✅ 正确做法：配合标签 (Label) 跳出指定循环
+			break LoopLabel
 		default:
-			// 非阻塞检查
+			// default 分支确保了如果 Context 没超时，代码不会卡在这里，而是继续往下走
+			// 这就是"非阻塞"的关键
 		}
 
-		// 检查停止标志
+		// 检查停止标志 ("瞄一眼队友")
 		if stopped.Load() {
-			fmt.Println("收到停止信号")
-			break
+			fmt.Println("【退出】收到停止信号 (Task Completed)")
+			break // 这里在 if 中，可以直接 break 跳出 for 循环
 		}
 
-		// 避免循环过快
+		// 模拟一些工作间隔，避免循环跑得太快占满 CPU
 		time.Sleep(time.Millisecond * 500)
 
-		// 防止无限循环（安全措施）
+		// 强制兜底刹车 (安全措施)
 		if loopCount >= 10 {
-			fmt.Println("达到最大循环次数，退出")
+			fmt.Println("【退出】达到最大循环次数 (Safety Limit)")
 			break
 		}
 	}
