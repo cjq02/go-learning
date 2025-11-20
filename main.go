@@ -9,6 +9,7 @@ import (
 	structs "go-learning/1.5_struct"
 	constants "go-learning/1.6_constants_enum"
 	operators "go-learning/1.7_operators"
+	controlflow "go-learning/1.8_control_flow"
 	"os"
 	"reflect"
 	"strings"
@@ -26,6 +27,8 @@ var demoRegistry = map[string]interface{}{
 	"FunctionsDemo": functions.FunctionsDemo,
 	"ClosureDemo":   functions.ClosureDemo,
 	"MethodDemo":    functions.MethodDemo,
+	// 流程控制示例
+	"IfStatementDemo": controlflow.IfStatementDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
