@@ -32,6 +32,9 @@ var demoRegistry = map[string]interface{}{
 	"IfStatementDemo":     controlflow.IfStatementDemo,
 	"SwitchStatementDemo": controlflow.SwitchStatementDemo,
 	"ForLoopDemo":         loopcontrol.ForLoopDemo,
+	"BreakDemo":           loopcontrol.BreakDemo,
+	"ContinueDemo":        loopcontrol.ContinueDemo,
+	"GotoDemo":            loopcontrol.GotoDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
