@@ -10,6 +10,7 @@ import (
 	constants "go-learning/1.6_constants_enum"
 	operators "go-learning/1.7_operators"
 	controlflow "go-learning/1.8_control_flow"
+	loopcontrol "go-learning/1.9_loop_control"
 	"os"
 	"reflect"
 	"strings"
@@ -30,6 +31,7 @@ var demoRegistry = map[string]interface{}{
 	// 流程控制示例
 	"IfStatementDemo":     controlflow.IfStatementDemo,
 	"SwitchStatementDemo": controlflow.SwitchStatementDemo,
+	"ForLoopDemo":         loopcontrol.ForLoopDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
