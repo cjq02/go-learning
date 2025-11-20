@@ -28,7 +28,8 @@ var demoRegistry = map[string]interface{}{
 	"ClosureDemo":   functions.ClosureDemo,
 	"MethodDemo":    functions.MethodDemo,
 	// 流程控制示例
-	"IfStatementDemo": controlflow.IfStatementDemo,
+	"IfStatementDemo":     controlflow.IfStatementDemo,
+	"SwitchStatementDemo": controlflow.SwitchStatementDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
