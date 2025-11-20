@@ -25,6 +25,7 @@ var demoRegistry = map[string]interface{}{
 	// 函数示例
 	"FunctionsDemo": functions.FunctionsDemo,
 	"ClosureDemo":   functions.ClosureDemo,
+	"MethodDemo":    functions.MethodDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
