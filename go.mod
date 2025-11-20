@@ -1,3 +1,3 @@
-module lesson1
+module go-learning
 
 go 1.25.4
