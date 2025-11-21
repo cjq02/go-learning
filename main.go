@@ -5,13 +5,14 @@ package main
 import (
 	"fmt"
 	functions "go-learning/1.10_method"
+	variablescope "go-learning/1.11_variable_scope"
+	array "go-learning/1.12_array"
 	pointers "go-learning/1.4_pointer"
 	structs "go-learning/1.5_struct"
 	constants "go-learning/1.6_constants_enum"
 	operators "go-learning/1.7_operators"
 	controlflow "go-learning/1.8_control_flow"
 	loopcontrol "go-learning/1.9_loop_control"
-	variablescope "go-learning/1.11_variable_scope"
 	"os"
 	"reflect"
 	"strings"
@@ -39,6 +40,11 @@ var demoRegistry = map[string]interface{}{
 	// 变量作用域示例
 	"LocalVariableDemo":  variablescope.LocalVariableDemo,
 	"GlobalVariableDemo": variablescope.GlobalVariableDemo,
+	// 数组示例
+	"ArrayDeclarationDemo":      array.ArrayDeclarationDemo,
+	"ArrayAccessDemo":           array.ArrayAccessDemo,
+	"MultidimensionalArrayDemo": array.MultidimensionalArrayDemo,
+	"ArrayAsParameterDemo":      array.ArrayAsParameterDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
