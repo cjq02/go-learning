@@ -276,6 +276,66 @@ LoopLabel:
 	fmt.Println()
 }
 
+// demonstrateBlankIdentifier 演示空白标识符（_）在 for 循环中的使用
+// 空白标识符用于忽略不需要的值，避免"声明但未使用"的编译错误
+func demonstrateBlankIdentifier() {
+	fmt.Println("=== 11. 空白标识符（_）在 for 循环中的使用 ===")
+	fmt.Println("说明：空白标识符 _ 用于忽略不需要的值，避免编译错误")
+
+	// 示例1：遍历数组，只获取值，忽略索引
+	fmt.Println("\n--- 示例1：只获取值，忽略索引 ---")
+	arr := [5]string{"apple", "banana", "cherry", "date", "elderberry"}
+	for _, value := range arr {
+		fmt.Printf("值: %s\n", value)
+	}
+
+	// 示例2：遍历数组，只获取索引，忽略值
+	fmt.Println("\n--- 示例2：只获取索引，忽略值 ---")
+	for index := range arr {
+		fmt.Printf("索引: %d\n", index)
+	}
+
+	// 示例3：遍历 map，只获取 key，忽略 value
+	fmt.Println("\n--- 示例3：遍历 map，只获取 key，忽略 value ---")
+	m := map[string]int{
+		"first":  1,
+		"second": 2,
+		"third":  3,
+	}
+	for key := range m {
+		fmt.Printf("key: %s\n", key)
+	}
+
+	// 示例4：遍历 map，只获取 value，忽略 key
+	fmt.Println("\n--- 示例4：遍历 map，只获取 value，忽略 key ---")
+	for _, value := range m {
+		fmt.Printf("value: %d\n", value)
+	}
+
+	// 示例5：遍历字符串，只获取字符，忽略位置
+	fmt.Println("\n--- 示例5：遍历字符串，只获取字符，忽略位置 ---")
+	str := "Go语言"
+	for _, char := range str {
+		fmt.Printf("字符: %c\n", char)
+	}
+
+	// 示例6：遍历切片，只获取值，忽略索引
+	fmt.Println("\n--- 示例6：遍历切片，只获取值，忽略索引 ---")
+	slice := []int{10, 20, 30, 40, 50}
+	sum := 0
+	for _, num := range slice {
+		sum += num
+	}
+	fmt.Printf("切片元素之和: %d\n", sum)
+
+	// ⚠️ 注意事项
+	fmt.Println("\n⚠️ 注意事项：")
+	fmt.Println("  - 空白标识符 _ 不能作为变量使用")
+	fmt.Println("  - 使用 _ 可以避免'声明但未使用'的编译错误")
+	fmt.Println("  - 在 range 循环中，_ 用于忽略不需要的返回值")
+	fmt.Println()
+}
+
 // ForLoopDemo for 循环完整演示主函数
 func ForLoopDemo() {
 	fmt.Println("========== 1.9.1 for 循环 ==========")
@@ -297,6 +357,7 @@ func ForLoopDemo() {
 	fmt.Println("- break: 跳出当前循环")
 	fmt.Println("- continue: 跳过当前迭代，继续下一次循环")
 	fmt.Println("- range: 用于遍历数组、切片、map 和字符串")
+	fmt.Println("- 空白标识符 _: 用于忽略不需要的值")
 	fmt.Println()
 
 	demonstrateBasicForLoop()
@@ -309,4 +370,5 @@ func ForLoopDemo() {
 	demonstrateNestedForLoop()
 	demonstrateForLoopControlStatements()
 	demonstrateComplexForLoop()
+	demonstrateBlankIdentifier()
 }
