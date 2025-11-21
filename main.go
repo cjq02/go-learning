@@ -7,6 +7,7 @@ import (
 	functions "go-learning/1.10_method"
 	variablescope "go-learning/1.11_variable_scope"
 	array "go-learning/1.12_array"
+	slice "go-learning/1.13_slice"
 	pointers "go-learning/1.4_pointer"
 	structs "go-learning/1.5_struct"
 	constants "go-learning/1.6_constants_enum"
@@ -45,6 +46,9 @@ var demoRegistry = map[string]interface{}{
 	"ArrayAccessDemo":           array.ArrayAccessDemo,
 	"MultidimensionalArrayDemo": array.MultidimensionalArrayDemo,
 	"ArrayAsParameterDemo":      array.ArrayAsParameterDemo,
+	// 切片示例
+	"SliceDeclarationDemo": slice.SliceDeclarationDemo,
+	"SliceUsageDemo":       slice.SliceUsageDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
