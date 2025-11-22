@@ -61,6 +61,7 @@ var demoRegistry = map[string]interface{}{
 	"RangeStringDemo":     rangeiteration.RangeStringDemo,
 	"RangeArraySliceDemo": rangeiteration.RangeArraySliceDemo,
 	"RangeChannelDemo":    rangeiteration.RangeChannelDemo,
+	"RangeMapDemo":        rangeiteration.RangeMapDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
