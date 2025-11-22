@@ -54,6 +54,7 @@ var demoRegistry = map[string]interface{}{
 	// map 示例
 	"MapDeclarationDemo": mapcollection.MapDeclarationDemo,
 	"MapUsageDemo":       mapcollection.MapUsageDemo,
+	"MapAsParameterDemo": mapcollection.MapAsParameterDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
