@@ -8,6 +8,7 @@ import (
 	variablescope "go-learning/1.11_variable_scope"
 	array "go-learning/1.12_array"
 	slice "go-learning/1.13_slice"
+	mapcollection "go-learning/1.14_map"
 	pointers "go-learning/1.4_pointer"
 	structs "go-learning/1.5_struct"
 	constants "go-learning/1.6_constants_enum"
@@ -50,6 +51,8 @@ var demoRegistry = map[string]interface{}{
 	"SliceDeclarationDemo":         slice.SliceDeclarationDemo,
 	"SliceUsageDemo":               slice.SliceUsageDemo,
 	"SliceUnderlyingPrincipleDemo": slice.SliceUnderlyingPrincipleDemo,
+	// map 示例
+	"MapDeclarationDemo": mapcollection.MapDeclarationDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
