@@ -60,6 +60,7 @@ var demoRegistry = map[string]interface{}{
 	// range 迭代示例
 	"RangeStringDemo":     rangeiteration.RangeStringDemo,
 	"RangeArraySliceDemo": rangeiteration.RangeArraySliceDemo,
+	"RangeChannelDemo":    rangeiteration.RangeChannelDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
