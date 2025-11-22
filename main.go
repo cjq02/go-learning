@@ -52,9 +52,10 @@ var demoRegistry = map[string]interface{}{
 	"SliceUsageDemo":               slice.SliceUsageDemo,
 	"SliceUnderlyingPrincipleDemo": slice.SliceUnderlyingPrincipleDemo,
 	// map 示例
-	"MapDeclarationDemo": mapcollection.MapDeclarationDemo,
-	"MapUsageDemo":       mapcollection.MapUsageDemo,
-	"MapAsParameterDemo": mapcollection.MapAsParameterDemo,
+	"MapDeclarationDemo":    mapcollection.MapDeclarationDemo,
+	"MapUsageDemo":          mapcollection.MapUsageDemo,
+	"MapAsParameterDemo":    mapcollection.MapAsParameterDemo,
+	"MapConcurrentDemo":     mapcollection.MapConcurrentDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
