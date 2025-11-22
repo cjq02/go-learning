@@ -47,8 +47,9 @@ var demoRegistry = map[string]interface{}{
 	"MultidimensionalArrayDemo": array.MultidimensionalArrayDemo,
 	"ArrayAsParameterDemo":      array.ArrayAsParameterDemo,
 	// 切片示例
-	"SliceDeclarationDemo": slice.SliceDeclarationDemo,
-	"SliceUsageDemo":       slice.SliceUsageDemo,
+	"SliceDeclarationDemo":         slice.SliceDeclarationDemo,
+	"SliceUsageDemo":               slice.SliceUsageDemo,
+	"SliceUnderlyingPrincipleDemo": slice.SliceUnderlyingPrincipleDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
