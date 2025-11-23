@@ -12,6 +12,7 @@ import (
 	rangeiteration "go-learning/1.15_range"
 	typeconversion "go-learning/1.16_type_conversion"
 	interfaceexample "go-learning/1.17_interface"
+	concurrency "go-learning/1.18_concurrency"
 	pointers "go-learning/1.4_pointer"
 	structs "go-learning/1.5_struct"
 	constants "go-learning/1.6_constants_enum"
@@ -75,6 +76,10 @@ var demoRegistry = map[string]interface{}{
 	"InterfaceReceiverDemo":       interfaceexample.InterfaceReceiverDemo,
 	"InterfaceNestingDemo":        interfaceexample.InterfaceNestingDemo,
 	"InterfaceEmptyDemo":          interfaceexample.InterfaceEmptyDemo,
+	// 并发示例
+	"GoroutineDemo":      concurrency.GoroutineDemo,
+	"ChannelDemo":        concurrency.ChannelDemo,
+	"LockAndChannelDemo": concurrency.LockAndChannelDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
