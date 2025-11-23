@@ -11,6 +11,7 @@ import (
 	mapcollection "go-learning/1.14_map"
 	rangeiteration "go-learning/1.15_range"
 	typeconversion "go-learning/1.16_type_conversion"
+	interfaceexample "go-learning/1.17_interface"
 	pointers "go-learning/1.4_pointer"
 	structs "go-learning/1.5_struct"
 	constants "go-learning/1.6_constants_enum"
@@ -68,6 +69,12 @@ var demoRegistry = map[string]interface{}{
 	"StringConversionDemo":    typeconversion.StringConversionDemo,
 	"InterfaceConversionDemo": typeconversion.InterfaceConversionDemo,
 	"StructConversionDemo":    typeconversion.StructConversionDemo,
+	// 接口示例
+	"InterfaceBasicDemo":          interfaceexample.InterfaceBasicDemo,
+	"InterfaceImplementationDemo": interfaceexample.InterfaceImplementationDemo,
+	"InterfaceReceiverDemo":       interfaceexample.InterfaceReceiverDemo,
+	"InterfaceNestingDemo":        interfaceexample.InterfaceNestingDemo,
+	"InterfaceEmptyDemo":          interfaceexample.InterfaceEmptyDemo,
 	// 结构体示例
 	"AnonymousStructDemo":  structs.AnonymousStructDemo,
 	"NestedStructDemo":     structs.NestedStructDemo,
