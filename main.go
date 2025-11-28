@@ -22,6 +22,7 @@ import (
 	ginroutes "go-learning/gin"
 	"os"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -29,116 +30,93 @@ import (
 
 // 变量声明
 
-// DemoRegistry 示例注册表 - 函数名到函数的映射
+// DemoRegistry 示例注册表 - key不带Demo后缀，直接使用简洁名称
 var demoRegistry = map[string]interface{}{
 	// 指针示例
-	"PointersDemo": pointers.PointersDemo,
+	"Pointers": pointers.PointersDemo,
 	// 函数示例
-	"FunctionsDemo": functions.FunctionsDemo,
-	"ClosureDemo":   functions.ClosureDemo,
-	"MethodDemo":    functions.MethodDemo,
+	"Functions": functions.FunctionsDemo,
+	"Closure":   functions.ClosureDemo,
+	"Method":    functions.MethodDemo,
 	// 流程控制示例
-	"IfStatementDemo":     controlflow.IfStatementDemo,
-	"SwitchStatementDemo": controlflow.SwitchStatementDemo,
-	"ForLoopDemo":         loopcontrol.ForLoopDemo,
-	"BreakDemo":           loopcontrol.BreakDemo,
-	"ContinueDemo":        loopcontrol.ContinueDemo,
-	"GotoDemo":            loopcontrol.GotoDemo,
+	"IfStatement":     controlflow.IfStatementDemo,
+	"SwitchStatement": controlflow.SwitchStatementDemo,
+	"ForLoop":         loopcontrol.ForLoopDemo,
+	"Break":           loopcontrol.BreakDemo,
+	"Continue":        loopcontrol.ContinueDemo,
+	"Goto":            loopcontrol.GotoDemo,
 	// 变量作用域示例
-	"LocalVariableDemo":  variablescope.LocalVariableDemo,
-	"GlobalVariableDemo": variablescope.GlobalVariableDemo,
+	"LocalVariable":  variablescope.LocalVariableDemo,
+	"GlobalVariable": variablescope.GlobalVariableDemo,
 	// 数组示例
-	"ArrayDeclarationDemo":      array.ArrayDeclarationDemo,
-	"ArrayAccessDemo":           array.ArrayAccessDemo,
-	"MultidimensionalArrayDemo": array.MultidimensionalArrayDemo,
-	"ArrayAsParameterDemo":      array.ArrayAsParameterDemo,
+	"ArrayDeclaration":      array.ArrayDeclarationDemo,
+	"ArrayAccess":           array.ArrayAccessDemo,
+	"MultidimensionalArray": array.MultidimensionalArrayDemo,
+	"ArrayAsParameter":      array.ArrayAsParameterDemo,
 	// 切片示例
-	"SliceDeclarationDemo":         slice.SliceDeclarationDemo,
-	"SliceUsageDemo":               slice.SliceUsageDemo,
-	"SliceUnderlyingPrincipleDemo": slice.SliceUnderlyingPrincipleDemo,
+	"SliceDeclaration":         slice.SliceDeclarationDemo,
+	"SliceUsage":               slice.SliceUsageDemo,
+	"SliceUnderlyingPrinciple": slice.SliceUnderlyingPrincipleDemo,
 	// map 示例
-	"MapDeclarationDemo": mapcollection.MapDeclarationDemo,
-	"MapUsageDemo":       mapcollection.MapUsageDemo,
-	"MapAsParameterDemo": mapcollection.MapAsParameterDemo,
-	"MapConcurrentDemo":  mapcollection.MapConcurrentDemo,
+	"MapDeclaration": mapcollection.MapDeclarationDemo,
+	"MapUsage":       mapcollection.MapUsageDemo,
+	"MapAsParameter": mapcollection.MapAsParameterDemo,
+	"MapConcurrent":  mapcollection.MapConcurrentDemo,
 	// range 迭代示例
-	"RangeStringDemo":     rangeiteration.RangeStringDemo,
-	"RangeArraySliceDemo": rangeiteration.RangeArraySliceDemo,
-	"RangeChannelDemo":    rangeiteration.RangeChannelDemo,
-	"RangeMapDemo":        rangeiteration.RangeMapDemo,
+	"RangeString":     rangeiteration.RangeStringDemo,
+	"RangeArraySlice": rangeiteration.RangeArraySliceDemo,
+	"RangeChannel":    rangeiteration.RangeChannelDemo,
+	"RangeMap":        rangeiteration.RangeMapDemo,
 	// 类型转换示例
-	"NumericConversionDemo":   typeconversion.NumericConversionDemo,
-	"StringConversionDemo":    typeconversion.StringConversionDemo,
-	"InterfaceConversionDemo": typeconversion.InterfaceConversionDemo,
-	"StructConversionDemo":    typeconversion.StructConversionDemo,
+	"NumericConversion":   typeconversion.NumericConversionDemo,
+	"StringConversion":    typeconversion.StringConversionDemo,
+	"InterfaceConversion": typeconversion.InterfaceConversionDemo,
+	"StructConversion":    typeconversion.StructConversionDemo,
 	// 接口示例
-	"InterfaceBasicDemo":          interfaceexample.InterfaceBasicDemo,
-	"InterfaceImplementationDemo": interfaceexample.InterfaceImplementationDemo,
-	"InterfaceReceiverDemo":       interfaceexample.InterfaceReceiverDemo,
-	"InterfaceNestingDemo":        interfaceexample.InterfaceNestingDemo,
-	"InterfaceEmptyDemo":          interfaceexample.InterfaceEmptyDemo,
+	"InterfaceBasic":          interfaceexample.InterfaceBasicDemo,
+	"InterfaceImplementation": interfaceexample.InterfaceImplementationDemo,
+	"InterfaceReceiver":       interfaceexample.InterfaceReceiverDemo,
+	"InterfaceNesting":        interfaceexample.InterfaceNestingDemo,
+	"InterfaceEmpty":          interfaceexample.InterfaceEmptyDemo,
 	// 并发示例
-	"GoroutineDemo":      concurrency.GoroutineDemo,
-	"ChannelDemo":        concurrency.ChannelDemo,
-	"LockAndChannelDemo": concurrency.LockAndChannelDemo,
+	"Goroutine":      concurrency.GoroutineDemo,
+	"Channel":        concurrency.ChannelDemo,
+	"LockAndChannel": concurrency.LockAndChannelDemo,
 	// 结构体示例
-	"AnonymousStructDemo":  structs.AnonymousStructDemo,
-	"NestedStructDemo":     structs.NestedStructDemo,
-	"StructMethodsDemo":    structs.StructMethodsDemo,
-	"CrossFileUsageDemo":   structs.CrossFileUsageDemo,
-	"LowercaseStructDemo":  structs.LowercaseStructDemo,
-	"RealWorldExampleDemo": structs.RealWorldExampleDemo,
+	"AnonymousStruct":  structs.AnonymousStructDemo,
+	"NestedStruct":     structs.NestedStructDemo,
+	"StructMethods":    structs.StructMethodsDemo,
+	"CrossFileUsage":   structs.CrossFileUsageDemo,
+	"LowercaseStruct":  structs.LowercaseStructDemo,
+	"RealWorldExample": structs.RealWorldExampleDemo,
 	// 常量示例
-	"ConstantsDemo": constants.ConstantsDemo,
-	"EnumsDemo":     constants.EnumsDemo,
+	"Constants": constants.ConstantsDemo,
+	"Enums":     constants.EnumsDemo,
 
 	// 运算符示例
-	"ArithmeticOperatorsDemo": operators.ArithmeticOperatorsDemo,
-	"OperatorsDemo":           operators.OperatorsDemo,
+	"ArithmeticOperators": operators.ArithmeticOperatorsDemo,
+	"Operators":           operators.OperatorsDemo,
 	// Gin路由示例
-	"BasicRoutesDemo":            ginroutes.BasicRoutesDemo,
-	"RESTfulRoutesDemo":          ginroutes.RESTfulRoutesDemo,
-	"PathParameterDemo":         ginroutes.PathParameterDemo,
-	"QueryParameterDemo":         ginroutes.QueryParameterDemo,
-	"JSONBindingDemo":            ginroutes.JSONBindingDemo,
-	"FormBindingDemo":            ginroutes.FormBindingDemo,
-	"RouteGroupDemo":             ginroutes.RouteGroupDemo,
-	"RegexRouteDemo":             ginroutes.RegexRouteDemo,
-	"MiddlewareRouteDemo":        ginroutes.MiddlewareRouteDemo,
-	"StaticFilesDemo":            ginroutes.StaticFilesDemo,
-	"CustomValidationDemo":       ginroutes.CustomValidationDemo,
-	"ValidationErrorHandlingDemo": ginroutes.ValidationErrorHandlingDemo,
-	"BuiltinValidationTagsDemo":  ginroutes.BuiltinValidationTagsDemo,
-	"UnifiedResponseDemo":         ginroutes.UnifiedResponseDemo,
-	"SensitiveDataFilterDemo":    ginroutes.SensitiveDataFilterDemo,
-	"RateLimitDemo":              ginroutes.RateLimitDemo,
-	"VersionControlDemo":          ginroutes.VersionControlDemo,
-	"SwaggerIntegrationDemo":      ginroutes.SwaggerIntegrationDemo,
-	"SwaggerAnnotationsDemo":     ginroutes.SwaggerAnnotationsDemo,
-	"SwaggerSecurityDemo":         ginroutes.SwaggerSecurityDemo,
-}
-
-// aliasRegistry 别名映射 - 动态生成
-var aliasRegistry = generateAliasRegistry()
-
-// generateAliasRegistry 动态生成别名映射
-// 从 demoRegistry 的 key 中去掉 "Demo" 后缀生成别名
-func generateAliasRegistry() map[string]string {
-	aliases := make(map[string]string)
-
-	for funcName := range demoRegistry {
-		// 去掉 "Demo" 后缀
-		if strings.HasSuffix(funcName, "Demo") {
-			alias := strings.TrimSuffix(funcName, "Demo")
-			// 将首字母转换为小写
-			if len(alias) > 0 {
-				alias = strings.ToLower(alias[:1]) + alias[1:]
-			}
-			aliases[alias] = funcName
-		}
-	}
-
-	return aliases
+	"BasicRoutes":             ginroutes.BasicRoutesDemo,
+	"RESTfulRoutes":           ginroutes.RESTfulRoutesDemo,
+	"PathParameter":           ginroutes.PathParameterDemo,
+	"QueryParameter":          ginroutes.QueryParameterDemo,
+	"JSONBinding":             ginroutes.JSONBindingDemo,
+	"FormBinding":             ginroutes.FormBindingDemo,
+	"RouteGroup":              ginroutes.RouteGroupDemo,
+	"RegexRoute":              ginroutes.RegexRouteDemo,
+	"MiddlewareRoute":         ginroutes.MiddlewareRouteDemo,
+	"StaticFiles":             ginroutes.StaticFilesDemo,
+	"CustomValidation":        ginroutes.CustomValidationDemo,
+	"ValidationErrorHandling": ginroutes.ValidationErrorHandlingDemo,
+	"BuiltinValidationTags":   ginroutes.BuiltinValidationTagsDemo,
+	"UnifiedResponse":         ginroutes.UnifiedResponseDemo,
+	"SensitiveDataFilter":     ginroutes.SensitiveDataFilterDemo,
+	"RateLimit":               ginroutes.RateLimitDemo,
+	"VersionControl":          ginroutes.VersionControlDemo,
+	"SwaggerIntegration":      ginroutes.SwaggerIntegrationDemo,
+	"SwaggerAnnotations":      ginroutes.SwaggerAnnotationsDemo,
+	"SwaggerSecurity":         ginroutes.SwaggerSecurityDemo,
 }
 
 // callDemoByReflection 通过反射调用示例函数
@@ -147,19 +125,17 @@ func callDemoByReflection(userInput string) error {
 	var demoFunc interface{}
 	var exists bool
 
-	// 步骤1: 直接查找函数名（用户可能直接输入函数名）
+	// 步骤1: 直接查找（支持大小写不敏感）
 	demoFunc, exists = demoRegistry[userInput]
 	if exists {
 		funcName = userInput
 	} else {
-		// 步骤2: 查找别名映射
-		funcName, exists = aliasRegistry[userInput]
-		if exists {
-			demoFunc, exists = demoRegistry[funcName]
-		} else {
-			// 步骤3: 智能转换 - 将输入转换为Demo函数名
-			// 例如: "constants" -> "ConstantsDemo"
-			funcName = toDemoFunctionName(userInput)
+		// 步骤2: 尝试首字母大写的格式（例如: "arrayAccess" -> "ArrayAccess"）
+		funcName = toPascalCase(userInput)
+		demoFunc, exists = demoRegistry[funcName]
+		if !exists {
+			// 步骤3: 尝试智能转换（处理下划线等）
+			funcName = toPascalCaseFromSnakeCase(userInput)
 			demoFunc, exists = demoRegistry[funcName]
 		}
 	}
@@ -196,19 +172,21 @@ func callDemoByReflection(userInput string) error {
 	return nil
 }
 
-// toDemoFunctionName 将用户输入转换为Demo函数名
-// 例如: "constants" -> "ConstantsDemo"
-//
-//	"anonymous_struct" -> "AnonymousStructDemo"
-func toDemoFunctionName(input string) string {
+// toPascalCase 将输入转换为PascalCase（首字母大写）
+// 例如: "arrayAccess" -> "ArrayAccess"
+func toPascalCase(input string) string {
 	if input == "" {
-		return "Demo"
+		return ""
 	}
+	// 首字母大写，其余保持原样
+	return strings.ToUpper(input[:1]) + input[1:]
+}
 
-	// 处理特殊情况
-	switch input {
-	case "reflection":
-		return "demonstrateReflection"
+// toPascalCaseFromSnakeCase 将下划线分隔的名称转换为PascalCase
+// 例如: "anonymous_struct" -> "AnonymousStruct"
+func toPascalCaseFromSnakeCase(input string) string {
+	if input == "" {
+		return ""
 	}
 
 	// 处理下划线分隔的名称
@@ -226,7 +204,7 @@ func toDemoFunctionName(input string) string {
 		}
 	}
 
-	return result.String() + "Demo"
+	return result.String()
 }
 
 // TestSmartDemo 智能Demo调用演示
@@ -270,27 +248,32 @@ func printHelp() {
 	fmt.Println("用法: go run main.go [示例名]")
 	fmt.Println()
 	fmt.Println("🎯 智能识别: 输入示例名自动匹配对应的 Demo 函数！")
-	fmt.Println("📝 命名规则: 示例名 + 'Demo' = 函数名")
+	fmt.Println("📝 使用方式: go run main.go <示例名>")
 	fmt.Println()
 	fmt.Println("可用示例:")
 
-	// 动态列出所有可用的示例
-	fmt.Println("  可用示例:")
+	// 获取所有示例名称并排序
+	allDemos := make([]string, 0, len(demoRegistry))
+	for funcName := range demoRegistry {
+		allDemos = append(allDemos, funcName)
+	}
 
-	// 动态显示所有别名和对应的函数
-	for alias, funcName := range aliasRegistry {
-		fmt.Printf("    %-15s → %s\n", alias, funcName)
+	// 按字母顺序排序
+	sort.Strings(allDemos)
+
+	// 显示所有示例
+	for _, funcName := range allDemos {
+		fmt.Printf("    %s\n", funcName)
 	}
 
 	fmt.Println()
 	fmt.Println("示例:")
-	fmt.Println("  go run main.go constants      # 自动调用 ConstantsDemo")
-	fmt.Println("  go run main.go anonymousStruct # 自动调用 AnonymousStructDemo")
-	fmt.Println("  go run main.go nestedStruct   # 自动调用 NestedStructDemo")
-	fmt.Println("  go run main.go structMethods  # 自动调用 StructMethodsDemo")
+	fmt.Println("  go run main.go ArrayAccess        # 数组访问示例")
+	fmt.Println("  go run main.go BasicRoutes        # Gin基础路由")
+	fmt.Println("  go run main.go Constants          # 常量示例")
+	fmt.Println("  go run main.go arrayAccess         # 支持小写开头（自动转换）")
 	fmt.Println()
-	fmt.Printf("当前注册了 %d 个示例函数\n", len(demoRegistry))
-	fmt.Printf("支持 %d 个输入别名\n", len(aliasRegistry))
-	fmt.Println("\n🚀 智能匹配: 输入名称 → 自动转换 → 调用对应Demo函数")
+	fmt.Printf("当前注册了 %d 个示例\n", len(demoRegistry))
+	fmt.Println("\n🚀 智能匹配: 支持大小写自动转换和下划线格式")
 	fmt.Println("💡 添加新示例: 只需在 demoRegistry 中添加函数注册即可！")
 }
