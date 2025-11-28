@@ -16,7 +16,7 @@ import (
 	operators "go-learning/basics/1.7_operators"
 	controlflow "go-learning/basics/1.8_control_flow"
 	loopcontrol "go-learning/basics/1.9_loop_control"
-	ginroutes "go-learning/gin"
+	ginroutes "go-learning/gin/1_router_parameter"
 )
 
 // DemoRegistry 示例注册表 - key不带Demo后缀，直接使用简洁名称
@@ -92,7 +92,7 @@ var demoRegistry = map[string]interface{}{
 	"QueryParameter":          ginroutes.QueryParameterDemo,
 	"JSONBinding":             ginroutes.JSONBindingDemo,
 	"FormBinding":             ginroutes.FormBindingDemo,
-	"RouteConflict":          ginroutes.RouteConflictDemo,
+	"RouteConflict":           ginroutes.RouteConflictDemo,
 	"RouteGroup":              ginroutes.RouteGroupDemo,
 	"RegexRoute":              ginroutes.RegexRouteDemo,
 	"MiddlewareRoute":         ginroutes.MiddlewareRouteDemo,
@@ -107,6 +107,4 @@ var demoRegistry = map[string]interface{}{
 	"SwaggerIntegration":      ginroutes.SwaggerIntegrationDemo,
 	"SwaggerAnnotations":      ginroutes.SwaggerAnnotationsDemo,
 	"SwaggerSecurity":         ginroutes.SwaggerSecurityDemo,
-	"SwaggerDocumentation":    ginroutes.SwaggerDocumentationDemo,
 }
-
