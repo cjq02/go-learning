@@ -92,6 +92,7 @@ var demoRegistry = map[string]interface{}{
 	"QueryParameter":          ginroutes.QueryParameterDemo,
 	"JSONBinding":             ginroutes.JSONBindingDemo,
 	"FormBinding":             ginroutes.FormBindingDemo,
+	"RouteConflict":          ginroutes.RouteConflictDemo,
 	"RouteGroup":              ginroutes.RouteGroupDemo,
 	"RegexRoute":              ginroutes.RegexRouteDemo,
 	"MiddlewareRoute":         ginroutes.MiddlewareRouteDemo,
