@@ -1,38 +1,22 @@
 {
-    // ============ Terminal 配置 ============
-
-    // 方法1：使用默认WSL发行版（推荐）
-    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\wsl.exe",
-
-    // 方法2：指定特定的WSL发行版（例如Ubuntu-24.04）
-    // "terminal.integrated.shell.windows": "C:\\Windows\\System32\\wsl.exe",
-    // "terminal.integrated.shellArgs.windows": ["-d", "Ubuntu-24.04"],
-
-    // 设置terminal的环境变量
-    "terminal.integrated.env.windows": {
-        "PATH": "${env:PATH}"
-    },
-
-    // ============ Go语言配置 ============
-
-    // Go语言工具管理
-    "go.toolsManagement.checkForUpdates": "local",
-    "go.useLanguageServer": true,
-    "go.formatTool": "gofmt",
-
-    // 如果您想在WSL中运行Go命令，可以取消注释下面的设置
-    // "go.alternateTools": {
-    //     "go": "wsl go"
-    // },
-
-    // ============ 其他可选配置 ============
-
-    // 设置terminal的默认工作目录为WSL中的项目目录
-    // "terminal.integrated.cwd": "${workspaceFolder}",
-
-    // 启用terminal的自动换行
-    // "terminal.integrated.wordWrap": true,
-
-    // 设置terminal的字体大小
-    // "terminal.integrated.fontSize": 14
+  // 启用实验性文件监听器（在 WSL 中更可靠）
+  "files.useExperimentalFileWatcher": true,
+  
+  // 文件监听排除项（减少不必要的监听，提高性能）
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.hg/store/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.vscode/**": false
+  },
+  
+  // 自动刷新文件资源管理器
+  "explorer.autoReveal": true,
+  
+  // 文件系统提供程序设置（WSL 特定）
+  "remote.WSL.fileWatcher.polling": true,
+  "remote.WSL.fileWatcher.pollingInterval": 1000
 }

@@ -19,6 +19,7 @@ import (
 	operators "go-learning/basics/1.7_operators"
 	controlflow "go-learning/basics/1.8_control_flow"
 	loopcontrol "go-learning/basics/1.9_loop_control"
+	ginroutes "go-learning/gin"
 	"os"
 	"reflect"
 	"strings"
@@ -94,6 +95,27 @@ var demoRegistry = map[string]interface{}{
 	// 运算符示例
 	"ArithmeticOperatorsDemo": operators.ArithmeticOperatorsDemo,
 	"OperatorsDemo":           operators.OperatorsDemo,
+	// Gin路由示例
+	"BasicRoutesDemo":            ginroutes.BasicRoutesDemo,
+	"RESTfulRoutesDemo":          ginroutes.RESTfulRoutesDemo,
+	"PathParameterDemo":         ginroutes.PathParameterDemo,
+	"QueryParameterDemo":         ginroutes.QueryParameterDemo,
+	"JSONBindingDemo":            ginroutes.JSONBindingDemo,
+	"FormBindingDemo":            ginroutes.FormBindingDemo,
+	"RouteGroupDemo":             ginroutes.RouteGroupDemo,
+	"RegexRouteDemo":             ginroutes.RegexRouteDemo,
+	"MiddlewareRouteDemo":        ginroutes.MiddlewareRouteDemo,
+	"StaticFilesDemo":            ginroutes.StaticFilesDemo,
+	"CustomValidationDemo":       ginroutes.CustomValidationDemo,
+	"ValidationErrorHandlingDemo": ginroutes.ValidationErrorHandlingDemo,
+	"BuiltinValidationTagsDemo":  ginroutes.BuiltinValidationTagsDemo,
+	"UnifiedResponseDemo":         ginroutes.UnifiedResponseDemo,
+	"SensitiveDataFilterDemo":    ginroutes.SensitiveDataFilterDemo,
+	"RateLimitDemo":              ginroutes.RateLimitDemo,
+	"VersionControlDemo":          ginroutes.VersionControlDemo,
+	"SwaggerIntegrationDemo":      ginroutes.SwaggerIntegrationDemo,
+	"SwaggerAnnotationsDemo":     ginroutes.SwaggerAnnotationsDemo,
+	"SwaggerSecurityDemo":         ginroutes.SwaggerSecurityDemo,
 }
 
 // aliasRegistry 别名映射 - 动态生成
