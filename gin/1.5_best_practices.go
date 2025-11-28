@@ -8,78 +8,140 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UnifiedResponseDemo 演示统一响应格式规范
+// UnifiedResponseDemo 演示 RESTful API 标准化响应格式
+// 这是 RESTful API 最佳实践的核心部分
 func UnifiedResponseDemo() {
-	fmt.Println("=== Gin 统一响应格式规范示例 ===")
+	fmt.Println("=== RESTful API 标准化响应格式示例 ===")
 	fmt.Println()
 
 	router := gin.Default()
 
-	// 定义统一响应结构
+	// ========== 标准化响应结构 ==========
+	// 统一的响应格式，便于前端统一处理
+	// 设计原则:
+	//   - code: 业务状态码，0 表示成功，非0表示失败
+	//   - data: 成功时返回的数据
+	//   - message: 错误时的提示信息
 	type Response struct {
-		Code    int         `json:"code"`
-		Message string      `json:"message"`
-		Data    interface{} `json:"data,omitempty"`
-		Error   string      `json:"error,omitempty"`
-		Time    int64       `json:"time"`
+		Code    int         `json:"code"`    // 业务状态码：0=成功，非0=失败
+		Data    interface{} `json:"data"`    // 成功时返回的数据
+		Message string      `json:"message"` // 错误时的提示信息
 	}
 
-	// 响应辅助函数
-	success := func(c *gin.Context, data interface{}) {
+	// ========== 响应辅助函数 ==========
+	// Success: 成功响应
+	// 参数:
+	//   - c: Gin 上下文
+	//   - data: 要返回的数据（可以是任意类型）
+	// 返回格式: {"code": 0, "data": {...}}
+	Success := func(c *gin.Context, data interface{}) {
 		c.JSON(http.StatusOK, Response{
-			Code:    200,
-			Message: "操作成功",
-			Data:    data,
-			Time:    time.Now().Unix(),
+			Code: 0,
+			Data: data,
 		})
 	}
 
-	errorResponse := func(c *gin.Context, code int, message string, err error) {
-		response := Response{
+	// Error: 错误响应
+	// 参数:
+	//   - c: Gin 上下文
+	//   - code: 业务错误码（非0）
+	//   - msg: 错误提示信息
+	// 返回格式: {"code": 1001, "message": "错误信息"}
+	Error := func(c *gin.Context, code int, msg string) {
+		c.JSON(http.StatusOK, Response{
 			Code:    code,
-			Message: message,
-			Time:    time.Now().Unix(),
-		}
-		if err != nil {
-			response.Error = err.Error()
-		}
-		c.JSON(http.StatusOK, response)
+			Message: msg,
+		})
 	}
 
-	// 使用统一响应格式
+	// ========== 使用示例 ==========
+	// 成功响应示例
 	router.GET("/users/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		success(c, gin.H{
-			"id":   id,
-			"name": "John Doe",
-		})
+		// 模拟查询用户信息
+		user := gin.H{
+			"id":    id,
+			"name":  "John Doe",
+			"email": "john@example.com",
+		}
+		Success(c, user)
 	})
 
+	// 错误响应示例
 	router.POST("/users", func(c *gin.Context) {
 		var user struct {
 			Name  string `json:"name" binding:"required"`
 			Email string `json:"email" binding:"required,email"`
 		}
 
+		// 参数校验失败
 		if err := c.ShouldBindJSON(&user); err != nil {
-			errorResponse(c, 1001, "参数校验失败", err)
+			Error(c, 1001, "参数校验失败: "+err.Error())
 			return
 		}
 
-		success(c, user)
+		// 业务逻辑验证（示例）
+		if user.Name == "admin" {
+			Error(c, 1002, "用户名不能为 admin")
+			return
+		}
+
+		// 成功创建
+		Success(c, gin.H{
+			"id":    1,
+			"name":  user.Name,
+			"email": user.Email,
+		})
 	})
 
-	fmt.Println("统一响应格式规范:")
-	fmt.Println("  成功响应: {\"code\": 200, \"message\": \"操作成功\", \"data\": {...}, \"time\": 1234567890}")
-	fmt.Println("  失败响应: {\"code\": 1001, \"message\": \"错误信息\", \"error\": \"详细错误\", \"time\": 1234567890}")
+	fmt.Println("========== 标准化响应格式 ==========")
 	fmt.Println()
-	fmt.Println("响应码规范:")
-	fmt.Println("  200  - 操作成功")
-	fmt.Println("  1001 - 参数校验失败")
-	fmt.Println("  1002 - 业务逻辑错误")
-	fmt.Println("  1003 - 认证失败")
-	fmt.Println("  1004 - 权限不足")
-	fmt.Println("  1005 - 资源不存在")
+	fmt.Println("响应结构:")
+	fmt.Println("  type Response struct {")
+	fmt.Println("      Code    int         `json:\"code\"`")
+	fmt.Println("      Data    interface{} `json:\"data\"`")
+	fmt.Println("      Message string      `json:\"message\"`")
+	fmt.Println("  }")
+	fmt.Println()
+	fmt.Println("成功响应示例:")
+	fmt.Println("  GET /users/123")
+	fmt.Println("  响应: {\"code\": 0, \"data\": {\"id\": \"123\", \"name\": \"John Doe\"}}")
+	fmt.Println()
+	fmt.Println("错误响应示例:")
+	fmt.Println("  POST /users (参数错误)")
+	fmt.Println("  响应: {\"code\": 1001, \"message\": \"参数校验失败\"}")
+	fmt.Println()
+	fmt.Println("========== 错误代码规范 ==========")
+	fmt.Println()
+	fmt.Println("业务错误码规范:")
+	fmt.Println("  0     - 操作成功")
+	fmt.Println()
+	fmt.Println("  1xxx  - 参数/请求错误")
+	fmt.Println("    1001 - 参数校验失败")
+	fmt.Println("    1002 - 认证失败")
+	fmt.Println("    1003 - 权限不足")
+	fmt.Println("    1004 - 资源不存在")
+	fmt.Println()
+	fmt.Println("  2xxx  - 服务端错误")
+	fmt.Println("    2001 - 数据库错误")
+	fmt.Println("    2002 - 缓存错误")
+	fmt.Println("    2003 - 第三方服务错误")
+	fmt.Println()
+	fmt.Println("  3xxx  - 业务逻辑错误")
+	fmt.Println("    3001 - 业务规则违反")
+	fmt.Println("    3002 - 状态不允许")
+	fmt.Println()
+	fmt.Println("设计原则:")
+	fmt.Println("  1. HTTP 状态码用于表示请求状态（200, 400, 500等）")
+	fmt.Println("  2. 业务状态码用于表示业务逻辑结果（0=成功，非0=失败）")
+	fmt.Println("  3. 所有响应都返回 HTTP 200，通过 code 字段区分成功/失败")
+	fmt.Println("  4. 便于前端统一处理，无需判断 HTTP 状态码")
+	fmt.Println()
+	fmt.Println("使用建议:")
+	fmt.Println("  1. 将 Success 和 Error 函数放在公共包中")
+	fmt.Println("  2. 统一错误码定义在常量文件中")
+	fmt.Println("  3. 使用枚举或常量避免硬编码错误码")
+	fmt.Println("  4. 提供错误码文档给前端团队")
 }
 
 // SensitiveDataFilterDemo 演示敏感参数过滤处理
@@ -105,8 +167,8 @@ func SensitiveDataFilterDemo() {
 		ID       int    `json:"id"`
 		Username string `json:"username"`
 		Email    string `json:"email"`
-		Password string `json:"-"` // 使用 json:"-" 标签排除序列化
-		Token    string `json:"-"` // 敏感信息不返回
+		Password string `json:"-"`               // 使用 json:"-" 标签排除序列化
+		Token    string `json:"-"`               // 敏感信息不返回
 		Phone    string `json:"phone,omitempty"` // 可选字段
 	}
 
@@ -282,3 +344,158 @@ func VersionControlDemo() {
 	fmt.Println("  4. 提供版本迁移文档")
 }
 
+// SwaggerDocumentationDemo 演示接口文档生成（Swagger）
+// Swagger 是 RESTful API 文档生成工具，可以自动生成交互式 API 文档
+func SwaggerDocumentationDemo() {
+	fmt.Println("=== RESTful API 接口文档生成示例 ===")
+	fmt.Println()
+
+	fmt.Println("========== Swagger 简介 ==========")
+	fmt.Println()
+	fmt.Println("Swagger 是一个强大的 API 文档工具，可以:")
+	fmt.Println("  1. 自动生成交互式 API 文档")
+	fmt.Println("  2. 支持在线测试接口")
+	fmt.Println("  3. 生成多种语言的客户端 SDK")
+	fmt.Println("  4. 提供 API 版本管理")
+	fmt.Println()
+
+	fmt.Println("========== 安装 Swagger ==========")
+	fmt.Println()
+	fmt.Println("1. 安装 swag 工具:")
+	fmt.Println("   go install github.com/swaggo/swag/cmd/swag@latest")
+	fmt.Println()
+	fmt.Println("2. 验证安装:")
+	fmt.Println("   swag --version")
+	fmt.Println()
+
+	fmt.Println("========== 在项目中使用 ==========")
+	fmt.Println()
+	fmt.Println("1. 安装 Gin Swagger 依赖:")
+	fmt.Println("   go get -u github.com/swaggo/gin-swagger")
+	fmt.Println("   go get -u github.com/swaggo/files")
+	fmt.Println()
+	fmt.Println("2. 在 main.go 中添加注释:")
+	fmt.Println("   // @title           API 文档标题")
+	fmt.Println("   // @version         1.0")
+	fmt.Println("   // @description     这是 API 文档描述")
+	fmt.Println("   // @termsOfService  http://swagger.io/terms/")
+	fmt.Println("   // @contact.name    API Support")
+	fmt.Println("   // @contact.url     http://www.example.com/support")
+	fmt.Println("   // @contact.email   support@example.com")
+	fmt.Println("   // @license.name    Apache 2.0")
+	fmt.Println("   // @license.url     http://www.apache.org/licenses/LICENSE-2.0.html")
+	fmt.Println("   // @host            localhost:8080")
+	fmt.Println("   // @BasePath        /api/v1")
+	fmt.Println()
+	fmt.Println("3. 在路由处理函数上添加注释:")
+	fmt.Println("   // @Summary         获取用户信息")
+	fmt.Println("   // @Description     根据用户ID获取详细信息")
+	fmt.Println("   // @Tags            users")
+	fmt.Println("   // @Accept          json")
+	fmt.Println("   // @Produce         json")
+	fmt.Println("   // @Param           id path int true \"用户ID\"")
+	fmt.Println("   // @Success         200 {object} Response")
+	fmt.Println("   // @Failure         400 {object} Response")
+	fmt.Println("   // @Router          /users/{id} [get]")
+	fmt.Println()
+	fmt.Println("4. 生成文档:")
+	fmt.Println("   swag init -g main.go")
+	fmt.Println()
+	fmt.Println("5. 在代码中引入 Swagger:")
+	fmt.Println("   import (")
+	fmt.Println("       swaggerFiles \"github.com/swaggo/files\"")
+	fmt.Println("       ginSwagger \"github.com/swaggo/gin-swagger\"")
+	fmt.Println("   )")
+	fmt.Println()
+	fmt.Println("   // 注册 Swagger 路由")
+	fmt.Println("   router.GET(\"/swagger/*any\", ginSwagger.WrapHandler(swaggerFiles.Handler))")
+	fmt.Println()
+	fmt.Println("6. 访问文档:")
+	fmt.Println("   浏览器打开: http://localhost:8080/swagger/index.html")
+	fmt.Println()
+
+	fmt.Println("========== 注释示例 ==========")
+	fmt.Println()
+	fmt.Println("// @Summary      创建用户")
+	fmt.Println("// @Description  创建新用户")
+	fmt.Println("// @Tags         users")
+	fmt.Println("// @Accept       json")
+	fmt.Println("// @Produce      json")
+	fmt.Println("// @Param        user body UserRequest true \"用户信息\"")
+	fmt.Println("// @Success      200 {object} Response{data=User}")
+	fmt.Println("// @Failure      400 {object} Response")
+	fmt.Println("// @Router       /users [post]")
+	fmt.Println("func CreateUser(c *gin.Context) {")
+	fmt.Println("    // ...")
+	fmt.Println("}")
+	fmt.Println()
+
+	fmt.Println("========== 常用注释标签 ==========")
+	fmt.Println()
+	fmt.Println("@title          - API 标题")
+	fmt.Println("@version        - API 版本")
+	fmt.Println("@description    - API 描述")
+	fmt.Println("@host           - 服务器地址")
+	fmt.Println("@BasePath       - 基础路径")
+	fmt.Println("@Summary        - 接口摘要")
+	fmt.Println("@Description    - 接口详细描述")
+	fmt.Println("@Tags           - 接口分组标签")
+	fmt.Println("@Accept         - 接受的请求类型 (json, xml, form)")
+	fmt.Println("@Produce        - 返回的数据类型 (json, xml)")
+	fmt.Println("@Param          - 参数说明 (path/query/body/header)")
+	fmt.Println("@Success        - 成功响应")
+	fmt.Println("@Failure        - 失败响应")
+	fmt.Println("@Router         - 路由定义")
+	fmt.Println("@Security       - 安全认证")
+	fmt.Println()
+
+	fmt.Println("========== 错误代码规范 ==========")
+	fmt.Println()
+	fmt.Println("标准错误码分类:")
+	fmt.Println()
+	fmt.Println("成功:")
+	fmt.Println("  0     - 操作成功")
+	fmt.Println()
+	fmt.Println("参数/请求错误 (1xxx):")
+	fmt.Println("  1001  - 参数校验失败")
+	fmt.Println("  1002  - 认证失败")
+	fmt.Println("  1003  - 权限不足")
+	fmt.Println("  1004  - 资源不存在")
+	fmt.Println("  1005  - 请求方法不允许")
+	fmt.Println("  1006  - 请求过于频繁")
+	fmt.Println()
+	fmt.Println("服务端错误 (2xxx):")
+	fmt.Println("  2001  - 数据库错误")
+	fmt.Println("  2002  - 缓存错误")
+	fmt.Println("  2003  - 第三方服务错误")
+	fmt.Println("  2004  - 内部服务器错误")
+	fmt.Println()
+	fmt.Println("业务逻辑错误 (3xxx):")
+	fmt.Println("  3001  - 业务规则违反")
+	fmt.Println("  3002  - 状态不允许")
+	fmt.Println("  3003  - 余额不足")
+	fmt.Println("  3004  - 操作冲突")
+	fmt.Println()
+	fmt.Println("错误码定义建议:")
+	fmt.Println("  // 定义错误码常量")
+	fmt.Println("  const (")
+	fmt.Println("      CodeSuccess          = 0")
+	fmt.Println("      CodeParamError       = 1001")
+	fmt.Println("      CodeAuthFailed       = 1002")
+	fmt.Println("      CodePermissionDenied = 1003")
+	fmt.Println("      CodeNotFound         = 1004")
+	fmt.Println("      CodeDatabaseError    = 2001")
+	fmt.Println("      CodeBusinessError    = 3001")
+	fmt.Println("  )")
+	fmt.Println()
+	fmt.Println("使用示例:")
+	fmt.Println("  Error(c, CodeParamError, \"用户名不能为空\")")
+	fmt.Println("  Error(c, CodeAuthFailed, \"登录已过期，请重新登录\")")
+	fmt.Println()
+	fmt.Println("最佳实践:")
+	fmt.Println("  1. 错误码统一管理，避免硬编码")
+	fmt.Println("  2. 错误码与错误信息分离，支持国际化")
+	fmt.Println("  3. 提供错误码对照表给前端")
+	fmt.Println("  4. 记录错误日志，便于排查问题")
+	fmt.Println("  5. 错误信息要清晰明确，便于用户理解")
+}

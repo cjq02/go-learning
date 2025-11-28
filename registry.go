@@ -107,5 +107,6 @@ var demoRegistry = map[string]interface{}{
 	"SwaggerIntegration":      ginroutes.SwaggerIntegrationDemo,
 	"SwaggerAnnotations":      ginroutes.SwaggerAnnotationsDemo,
 	"SwaggerSecurity":         ginroutes.SwaggerSecurityDemo,
+	"SwaggerDocumentation":    ginroutes.SwaggerDocumentationDemo,
 }
 
