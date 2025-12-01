@@ -17,6 +17,7 @@ import (
 	controlflow "go-learning/basics/1.8_control_flow"
 	loopcontrol "go-learning/basics/1.9_loop_control"
 	ginroutes "go-learning/gin/1_router_parameter"
+	ginmiddleware "go-learning/gin/2_middleware"
 )
 
 // DemoRegistry 示例注册表 - key不带Demo后缀，直接使用简洁名称
@@ -107,4 +108,12 @@ var demoRegistry = map[string]interface{}{
 	"SwaggerIntegration":      ginroutes.SwaggerIntegrationDemo,
 	"SwaggerAnnotations":      ginroutes.SwaggerAnnotationsDemo,
 	"SwaggerSecurity":         ginroutes.SwaggerSecurityDemo,
+	// Gin中间件示例
+	"MiddlewareFlow":          ginmiddleware.MiddlewareFlowDemo,
+	"JWTAuth":                 ginmiddleware.JWTAuthDemo,
+	"CORSMiddleware":          ginmiddleware.CORSMiddlewareDemo,
+	"MiddlewareDebug":         ginmiddleware.MiddlewareDebugDemo,
+	"MiddlewareBestPractices": ginmiddleware.MiddlewareBestPracticesDemo,
+	"MiddlewareTest":          ginmiddleware.MiddlewareTestDemo,
+	"GinRouter":               ginmiddleware.GinRouterDemo,
 }
