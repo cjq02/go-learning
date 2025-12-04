@@ -10,6 +10,10 @@ import (
 	typeconversion "go-learning/basics/1.16_type_conversion"
 	interfaceexample "go-learning/basics/1.17_interface"
 	concurrency "go-learning/basics/1.18_concurrency"
+	blockchainio "go-learning/blockchain/1_blockchain_io"
+	comparison "go-learning/blockchain/2_go_vs_nodejs"
+	goexclusive "go-learning/blockchain/3_go_exclusive_scenarios"
+	realscenarios "go-learning/blockchain/4_real_business_scenarios"
 	pointers "go-learning/basics/1.4_pointer"
 	structs "go-learning/basics/1.5_struct"
 	constants "go-learning/basics/1.6_constants_enum"
@@ -72,6 +76,14 @@ var demoRegistry = map[string]interface{}{
 	"Goroutine":      concurrency.GoroutineDemo,
 	"Channel":        concurrency.ChannelDemo,
 	"LockAndChannel": concurrency.LockAndChannelDemo,
+	// 区块链 I/O 示例
+	"BlockchainIO": blockchainio.BlockchainIODemo,
+	// Go vs Node.js 对比示例
+	"GoVsNodejs": comparison.GoVsNodejsConcurrencyDemo,
+	// Go 独占优势场景示例
+	"GoExclusive": goexclusive.GoExclusiveWeb3ScenariosDemo,
+	// 真实业务场景分析示例
+	"BlockSyncNecessity": realscenarios.BlockSyncNecessityDemo,
 	// 结构体示例
 	"AnonymousStruct":  structs.AnonymousStructDemo,
 	"NestedStruct":     structs.NestedStructDemo,
