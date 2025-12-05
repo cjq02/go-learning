@@ -134,4 +134,5 @@ var demoRegistry = map[string]interface{}{
 	"GormRelationships":       gormexamples.GormRelationshipsDemo,
 	"GormQueryOptimization":   gormexamples.GormQueryOptimizationDemo,
 	"GormDatabaseConfig":      gormexamples.GormDatabaseConfigDemo,
+	"GormPreloadExplanation":  gormexamples.GormPreloadExplanationDemo,
 }

@@ -44,20 +44,26 @@ func GormDatabaseConfigDemo() {
 	}
 
 	// 构建 DSN（Data Source Name）
+	// DSN 是数据库连接字符串，包含所有连接信息
+	// 格式：username:password@tcp(host:port)/database?参数
 	// fuyelead 项目使用 Asia/Shanghai 时区
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Asia%%2FShanghai",
-		config.User,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Name,
-		config.Charset,
+		config.User,     // 数据库用户名
+		config.Password, // 数据库密码
+		config.Host,     // 数据库主机地址
+		config.Port,     // 数据库端口（MySQL 默认 3306）
+		config.Name,     // 数据库名称
+		config.Charset,  // 字符集
 	)
 	fmt.Printf("   DSN 示例: %s\n", dsn)
 	fmt.Println("   关键参数说明：")
 	fmt.Println("     - charset=utf8mb4: 支持完整的 UTF-8 字符集（包括 emoji）")
-	fmt.Println("     - parseTime=True: 自动解析时间字段")
+	fmt.Println("       utf8mb4 是 utf8 的超集，支持 4 字节字符（如 emoji）")
+	fmt.Println("     - parseTime=True: 自动解析时间字段为 Go 的 time.Time 类型")
+	fmt.Println("       如果不设置，时间字段会返回 []byte，需要手动解析")
 	fmt.Println("     - loc=Asia/Shanghai: 使用中国时区（UTC+8）")
+	fmt.Println("       确保时间字段使用正确的时区，避免时区转换问题")
+	fmt.Println("       %%2F 是 URL 编码的 / 符号")
 	fmt.Println()
 
 	// 2. GORM 配置（基于 fuyelead 项目）
@@ -101,19 +107,29 @@ func GormDatabaseConfigDemo() {
 	}
 
 	// fuyelead 项目的连接池配置
-	sqlDB.SetMaxIdleConns(10)        // 最大空闲连接数
-	sqlDB.SetMaxOpenConns(100)       // 最大打开连接数
-	sqlDB.SetConnMaxLifetime(time.Hour) // 连接最大生存时间
+	// 连接池的作用：
+	// - 复用数据库连接，避免频繁创建和销毁连接
+	// - 控制并发连接数，防止数据库连接过多
+	// - 提升性能，减少连接建立的开销
+	sqlDB.SetMaxIdleConns(10) // 最大空闲连接数：连接池中保持的空闲连接数
+	// 空闲连接可以立即使用，不需要重新建立
+	sqlDB.SetMaxOpenConns(100) // 最大打开连接数：同时打开的最大连接数
+	// 超过此数量，新的请求会等待
+	sqlDB.SetConnMaxLifetime(time.Hour) // 连接最大生存时间：连接使用超过此时间会被关闭
+	// 防止长时间连接导致的问题（如超时）
 
-	fmt.Println("   连接池参数:")
+	fmt.Println("   连接池参数说明:")
 	fmt.Printf("     MaxIdleConns: %d (最大空闲连接数)\n", 10)
+	fmt.Println("       连接池中保持的空闲连接数，建议设置为应用的平均并发数")
 	fmt.Printf("     MaxOpenConns: %d (最大打开连接数)\n", 100)
+	fmt.Println("       同时打开的最大连接数，建议根据数据库服务器配置调整")
 	fmt.Printf("     ConnMaxLifetime: %s (连接最大生存时间)\n", time.Hour)
+	fmt.Println("       连接使用超过此时间会被关闭并重新创建，防止连接超时")
 	fmt.Println()
 
 	// 4. 实际连接示例（使用 SQLite 演示）
 	fmt.Println("4. 实际连接示例（使用 SQLite 内存数据库）")
-	
+
 	// 测试连接
 	err = sqlDB.Ping()
 	if err != nil {
@@ -193,7 +209,7 @@ func GormDatabaseConfigDemo() {
 func NewDatabase(config *DatabaseConfig) (*Database, error) {
 	// 注意：这里只是示例，实际使用时需要 MySQL 驱动
 	// 示例中使用 SQLite 演示
-	
+
 	// 实际项目中的 MySQL DSN 构建（这里仅作演示，实际使用 SQLite）
 	_ = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Asia%%2FShanghai",
 		config.User,
@@ -231,4 +247,3 @@ func NewDatabase(config *DatabaseConfig) (*Database, error) {
 
 	return &Database{DB: db}, nil
 }
-

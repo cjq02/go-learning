@@ -89,21 +89,38 @@ func GormQueryOptimizationDemo() {
 
 	// 1. 分页查询（fuyelead 项目中的标准模式）
 	fmt.Println("1. 分页查询（fuyelead 项目标准模式）")
+	fmt.Println()
+	fmt.Println("   分页查询标准流程：")
+	fmt.Println("   1. 先查询总数（用于计算总页数）")
+	fmt.Println("   2. 再查询当前页的数据（带 Preload 预加载关联）")
+	fmt.Println("   3. 使用 Limit 和 Offset 实现分页")
+	fmt.Println()
+	fmt.Println("   注意：")
+	fmt.Println("   - Count 查询会扫描所有记录，大数据量时可能较慢")
+	fmt.Println("   - 可以使用缓存优化 Count 查询")
+	fmt.Println("   - Offset 在大数据量时性能较差，建议使用游标分页")
+	fmt.Println()
 
-	limit := 3
-	offset := 0
+	limit := 3  // 每页显示的记录数
+	offset := 0 // 偏移量（第1页为0，第2页为limit，第3页为2*limit）
 
 	// 1.1 先查询总数
+	// Count 会执行 SELECT COUNT(*) FROM table
+	// 返回符合条件的记录总数（用于计算总页数）
 	var total int64
 	db.Model(&OrderWithRelations{}).Count(&total)
 	fmt.Printf("   总订单数: %d\n", total)
 
 	// 1.2 分页查询数据
+	// 使用 Preload 预加载关联数据，避免 N+1 问题
+	// Order 指定排序规则（DESC 降序，ASC 升序）
+	// Limit 限制返回的记录数
+	// Offset 跳过前面的记录数
 	var orders []OrderWithRelations
 	db.Preload("User").
-		Order("created_at DESC").
-		Limit(limit).
-		Offset(offset).
+		Order("created_at DESC"). // 按创建时间降序排序（最新的在前）
+		Limit(limit).             // 限制返回 3 条记录
+		Offset(offset).           // 跳过前 0 条记录（第1页）
 		Find(&orders)
 
 	fmt.Printf("   第 1 页（每页 %d 条）: %d 条记录\n", limit, len(orders))
@@ -126,22 +143,46 @@ func GormQueryOptimizationDemo() {
 	// 3. 子查询优化（fuyelead 项目中的高级技巧）
 	fmt.Println("3. 子查询优化（获取每个订单的最新日志）")
 	fmt.Println("   fuyelead 项目使用子查询避免 N+1 问题")
+	fmt.Println()
+	fmt.Println("   问题场景：")
+	fmt.Println("   - 每个订单有多条日志，需要获取每个订单的最新日志")
+	fmt.Println("   - 如果循环查询，会产生 N+1 问题")
+	fmt.Println()
+	fmt.Println("   解决方案：")
+	fmt.Println("   - 使用子查询先找出每个订单的最新日志时间")
+	fmt.Println("   - 再通过 JOIN 一次性获取所有最新日志")
+	fmt.Println("   - 从 N+1 次查询优化为 2 次查询")
+	fmt.Println()
 
 	var allOrders []OrderWithRelations
 	db.Find(&allOrders)
 
 	if len(allOrders) > 0 {
+		// 收集所有订单ID
 		orderIDs := make([]int, len(allOrders))
 		for i, o := range allOrders {
 			orderIDs[i] = o.ID
 		}
 
-		// 使用子查询获取每个订单的最新日志
+		// 步骤1：构建子查询，找出每个订单的最新日志时间
+		// 子查询逻辑：
+		// SELECT order_id, MAX(created_at) as max_created_at
+		// FROM t_order_log
+		// WHERE order_id IN (1, 2, 3, ...)
+		// GROUP BY order_id
 		subquery := db.Table("t_order_log").
 			Select("order_id, MAX(created_at) as max_created_at").
 			Where("order_id IN ?", orderIDs).
 			Group("order_id")
 
+		// 步骤2：使用 JOIN 连接子查询，获取每个订单的最新日志
+		// 主查询逻辑：
+		// SELECT ol.*
+		// FROM t_order_log as ol
+		// INNER JOIN (子查询) as latest
+		//   ON ol.order_id = latest.order_id
+		//   AND ol.created_at = latest.max_created_at
+		// WHERE ol.order_id IN (1, 2, 3, ...)
 		var latestLogs []OrderLog
 		db.Table("t_order_log as ol").
 			Select("ol.*").
@@ -215,32 +256,53 @@ func GormQueryOptimizationDemo() {
 
 	// 8. 事务处理
 	fmt.Println("8. 事务处理")
+	fmt.Println()
+	fmt.Println("   事务说明：")
+	fmt.Println("   - 事务保证多个操作要么全部成功，要么全部失败")
+	fmt.Println("   - 适用于需要保证数据一致性的场景")
+	fmt.Println("   - Begin() 开始事务，Commit() 提交，Rollback() 回滚")
+	fmt.Println()
+	fmt.Println("   使用场景：")
+	fmt.Println("   - 创建订单时同时创建订单日志")
+	fmt.Println("   - 转账操作（扣款和加款必须同时成功）")
+	fmt.Println("   - 批量操作（部分失败需要全部回滚）")
+	fmt.Println()
 
+	// 开始事务
+	// Begin() 返回一个事务对象 *gorm.DB
+	// 后续所有操作都使用 tx，而不是 db
 	tx := db.Begin()
+
+	// 使用 defer + recover 确保发生 panic 时回滚事务
 	defer func() {
 		if r := recover(); r != nil {
-			tx.Rollback()
+			tx.Rollback() // 发生错误时回滚事务
 			fmt.Println("   事务回滚")
 		}
 	}()
 
 	// 在事务中执行多个操作
+	// 注意：必须使用 tx 而不是 db
 	newOrder := &OrderWithRelations{
 		OrderNo:    "ORD_TX001",
 		UserID:     user.ID,
 		TotalPrice: 500.00,
 		Status:     "pending",
 	}
-	tx.Create(newOrder)
+	tx.Create(newOrder) // 使用 tx.Create
 
+	// 创建订单日志（依赖订单ID）
 	log := &OrderLog{
 		OrderID:   newOrder.ID,
 		OrderNo:   newOrder.OrderNo,
 		NewStatus: "pending",
 		Action:    stringPtr("created"),
 	}
-	tx.Create(log)
+	tx.Create(log) // 使用 tx.Create
 
+	// 提交事务
+	// 如果 Commit 失败，会自动回滚
+	// 如果前面的操作有错误，应该调用 Rollback() 而不是 Commit()
 	tx.Commit()
 	fmt.Println("   ✓ 事务提交成功")
 	fmt.Println()
