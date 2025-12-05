@@ -22,6 +22,7 @@ import (
 	loopcontrol "go-learning/basics/1.9_loop_control"
 	ginroutes "go-learning/gin/1_router_parameter"
 	ginmiddleware "go-learning/gin/2_middleware"
+	gormexamples "go-learning/gorm"
 )
 
 // DemoRegistry 示例注册表 - key不带Demo后缀，直接使用简洁名称
@@ -128,4 +129,9 @@ var demoRegistry = map[string]interface{}{
 	"MiddlewareBestPractices": ginmiddleware.MiddlewareBestPracticesDemo,
 	"MiddlewareTest":          ginmiddleware.MiddlewareTestDemo,
 	"GinRouter":               ginmiddleware.GinRouterDemo,
+	// GORM 示例（基于 fuyelead 项目）
+	"GormBasics":              gormexamples.GormBasicsDemo,
+	"GormRelationships":       gormexamples.GormRelationshipsDemo,
+	"GormQueryOptimization":   gormexamples.GormQueryOptimizationDemo,
+	"GormDatabaseConfig":      gormexamples.GormDatabaseConfigDemo,
 }
